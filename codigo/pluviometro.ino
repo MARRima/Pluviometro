@@ -67,8 +67,8 @@ void loop() {
  ***************************************************/
 void generarRuta(){
   //Serial.println("generando ruta");
-      folder ="/" + String(nYear)+"-" + String(nMonth);
-      file ="/"+ String(nYear) +"-" + String(nMonth) +"-" + String(nDay) + ".csv";// fecha+extension
+      folder ="/" + String(nYear) + String(nMonth);
+      file ="/"+ String(nYear)  + String(nMonth) + String(nDay) + ".csv";// fecha+extension
       logN = String(nYear) + "-" + String(nMonth) + "-" + String(nDay) + "," //fecha
                       + String(nHour) + ":" + String(nMin) + ":" 
                       + String(nSec) ; //hora;
@@ -100,52 +100,54 @@ void obtenerHora(){
 //      Serial.println("");
 //      Serial.println(folder);
 //      Serial.println(ruta);
-//      Serial.println(logN);
+//     Serial.println(logN);
       char fichero[10];
-      char dir[25];
+      char dir[50];
       folder.toCharArray(fichero,10);
-      ruta.toCharArray(dir,25);      
+      ruta.toCharArray(dir,50);      
       //SD.mkdir(fichero);
       if(!SD.exists(fichero)){
         //Serial.println("creando carpeta");
           SD.mkdir(fichero);
       }
- 
       f = SD.open(dir, FILE_WRITE);//abrimos  el archivo
+//      Serial.println("ok");
+//      Serial.println(dir);
           if (f) { 
-           // Serial.println("escrito");              
+//            Serial.println("escrito");              
             f.println(logN);
-            //Serial.println("escribimos el log");
+//            Serial.println("escribimos el log");
             f.close(); //cerramos el archivo  
                
       }    
   }
+ 
  /********************************************** ****************
  * Esta funcion revisa todos los datos almacenados en un mes,   *   
  * realiza un recuento, y crea un nuevo archivo que consta      *
  * el mes y la cantidad registrada                              *
  ****************************************************************/
+ 
   void recuento(){
   float suma = 0;
   String mese;
   File l;
   int i,k=0;//contador
-  char fichero[10];//La funcion SD.open("",.. ) hay que mandarle un char
-  char dir[25];  
+  //La funcion SD.open("",.. ) hay que mandarle un char
+      char dirr[50];  
   if(nMonth==1){//Debemos de descartar el mes 0.
     mese=12;
   }else{mese=nMonth-1;}
   for (i=1;i<=31;i++){//realizamos un barrido de todos los dias
-    ruta ="/" + String(nYear)+"-" + 
+    ruta ="/" + String(nYear) + 
     String(mese)
-    +"/"+ String(nYear) +"-" 
-        + String(mese) +"-" + String(i) + ".csv";
-    ruta.toCharArray(dir,25); 
+    +"/"+ String(nYear)  + String(mese) +"-" + String(i) + ".csv";
+    ruta.toCharArray(dirr,25); 
 
 ////
-if(SD.exists(dir)){// Como hemos realizado el barrido debemos descartar los que no existan
+if(SD.exists(dirr)){// Como hemos realizado el barrido debemos descartar los que no existan
 
-    l=SD.open(dir,FILE_READ);
+    l=SD.open(dirr,FILE_READ);
 //    Serial.println("hemos leido ");
     if(l){
 //       Serial.println("l es verdad");
@@ -164,7 +166,7 @@ if(SD.exists(dir)){// Como hemos realizado el barrido debemos descartar los que 
    }    
     }
     ruta="/"+ String(nYear) + ".csv" ;
-    ruta.toCharArray(dir,25);  
+    ruta.toCharArray(dirr,25);  
     //A continuacion iniciamos la traduccion del numero a letra, 1->Enero, 2->Febr..
     if(mese=1)mese = "Enero";
     if(mese=2)mese = "Febrero";
@@ -179,7 +181,6 @@ if(SD.exists(dir)){// Como hemos realizado el barrido debemos descartar los que 
     if(mese=11)mese = "Noviembre";
     if(mese=12)mese = "Diciembre";
 
-    l=SD.open(dir,FILE_WRITE);
     if(l){
       l.println(mese+","+String(suma)+","+"mm");
 //      Serial.println("hecho");
