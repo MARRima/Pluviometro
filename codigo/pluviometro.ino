@@ -160,7 +160,7 @@ if(SD.exists(dirr)){// Como hemos realizado el barrido debemos descartar los que
           if(l.read()=='\n')k++;
           }
       l.close();
-      suma=suma+k*1.0;//El valor numérico debe ser la relacion del volumen del balancin, y tamano de embudo
+      suma=suma+k*0.44853;//El valor numérico debe ser la relacion del volumen del balancin, y tamano de embudo
       }
 
    }    
